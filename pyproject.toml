@@ -1,10 +1,10 @@
 [build-system]
-requires = ["scikit-build-core>=0.3.3", "pybind11"]
+requires = ["scikit-build-core", "pybind11"]
 build-backend = "scikit_build_core.build"
 
 [project]
 name = "cuda_available"
-version = "0.1.0"
+dynamic = ["version"]
 description = "A package for checking available CUDA device information"
 readme = "README.md"
 authors = [{ name = "Alex", email = "AlexZhu2001@stu.xupt.edu.cn" }]
@@ -24,6 +24,11 @@ classifiers = [
 [tool.scikit-build]
 cmake.minimum-version = "3.15"
 wheel.expand-macos-universal-tags = true
+experimental=true
+
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "VERSION"
 
 [tool.cibuildwheel]
 build-verbosity = 1

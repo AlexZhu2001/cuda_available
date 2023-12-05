@@ -2,6 +2,8 @@
 
 A package for checking available CUDA device information
 
+![GitHub License](https://img.shields.io/github/license/AlexZhu2001/cuda_available)
+
 ### Usage
 #### Get count of cuda device
 ```Python
