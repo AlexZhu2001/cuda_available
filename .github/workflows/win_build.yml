@@ -59,4 +59,14 @@ jobs:
         shell: bash
         run: python -m cibuildwheel --output-dir wheelhouse
       
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
       
+      - name: Publish wheels to PyPI Unix
+        continue-on-error: true
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          twine upload wheelhouse/*.whl
