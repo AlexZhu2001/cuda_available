@@ -60,7 +60,7 @@ jobs:
       - name: Build wheels
         shell: powershell
         env:
-          CIBW_ENVIRONMENT: CMAKE_ARGS='-G ${{matrix.visual_studio}}'
+          CIBW_ENVIRONMENT: CMAKE_ARGS='-G "${{matrix.visual_studio}}"'
         run: python -m cibuildwheel --output-dir wheelhouse
       
       
