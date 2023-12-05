@@ -43,7 +43,8 @@ jobs:
           ls $env:CUDA_PATH
           ls $env:CUDA_PATH\bin
           ls $env:CUDA_PATH\include
-      
+          
+      - uses: seanmiddleditch/gha-setup-ninja@master
       - uses: actions/setup-python@v3
 
       - name: Install cibuildwheel
@@ -58,6 +59,8 @@ jobs:
       
       - name: Build wheels
         shell: powershell
+        env:
+          CIBW_ENVIRONMENT: CMAKE_ARGS='-G Ninja'
         run: python -m cibuildwheel --output-dir wheelhouse
       
       
