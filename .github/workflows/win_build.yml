@@ -58,9 +58,7 @@ jobs:
         run: python ./scripts/make_version.py
       
       - name: Build wheels
-        shell: powershell
-        env:
-          CIBW_ENVIRONMENT: CMAKE_ARGS='-G "${{matrix.visual_studio}}"'
+        shell: bash
         run: python -m cibuildwheel --output-dir wheelhouse
       
       
