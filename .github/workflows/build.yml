@@ -91,7 +91,7 @@ jobs:
           rm -rf ./wheelhouse
           python -m pip install cibuildwheel==2.16.2
       - name: Write version to file
-        shell: powershell
+        shell: bash
         env:
           CUDA_VERSION: ${{ matrix.cuda }}
         run: python ./scripts/make_version.py
@@ -138,7 +138,7 @@ jobs:
       - name: Install gcc and g++
         run: sudo apt-get install gcc-11 g++-11
       - name: Write version to file
-        shell: powershell
+        shell: bash
         env:
           CUDA_VERSION: ${{ matrix.cuda }}
         run: python ./scripts/make_version.py
