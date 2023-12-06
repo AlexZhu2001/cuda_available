@@ -25,7 +25,7 @@ public:
         : reason(error_str)
     {
     }
-    char const *what() const override
+    const char *what() const noexcept override
     {
         return this->reason;
     }
