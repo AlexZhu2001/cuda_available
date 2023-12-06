@@ -8,8 +8,7 @@ import os
 VERSION = "0.1.0"
 CUDA_VERSION = ''.join(os.environ["CUDA_VERSION"].split('.')[:-1])
 
-with open("VERSION", 'w') as f:
+with open("/tmp/VERSION", 'w') as f:
     f.write(f"{VERSION}+cu{CUDA_VERSION}")
 
-print("Version write to VERSION")
-print("\n".join(os.listdir()))
+print("Version write to /tmp/VERSION")

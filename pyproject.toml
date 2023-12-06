@@ -28,7 +28,7 @@ experimental = true
 
 [tool.scikit-build.metadata.version]
 provider = "scikit_build_core.metadata.regex"
-input = "VERSION"
+input = "/tmp/VERSION"
 regex = "(?P<value>.+)"
 
 [tool.cibuildwheel]
@@ -36,8 +36,8 @@ build-verbosity = 1
 archs = ["auto64"]
 
 [tool.cibuildwheel.linux]
-before-build = "python3.9 ./scripts/install_cuda_manylinux.py"
-environment-pass = ["CUDA_VERSION", "PATH", "LD_LIBRARY_PATH"]
+before-build = "python3.9 ./scripts/install_cuda_manylinux.py&&source /root/.bashrc"
+environment-pass = ["CUDA_VERSION"]
 
 [tool.ruff]
 src = ["src"]

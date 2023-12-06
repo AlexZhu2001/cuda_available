@@ -22,4 +22,15 @@ if __name__ == "__main__":
     cmd(f"yum-config-manager --add-repo {repo}")
     cmd("yum clean all")
     cmd(f"yum -y install {cuda_tookit}")
-    
+    cuda_var = f"export CUDA_PATH=/usr/local/cuda-{cuda_ver}"
+    with open("/root/.bashrc", 'a') as f:
+        f.write("\n")
+        f.write("# Add cuda env")
+        f.write(cuda_var)
+        f.write(
+"""
+export PATH="$CUDA_PATH/bin:$PATH"
+export LD_LIBRARY_PATH="$CUDA_PATH/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
+"""
+        )
