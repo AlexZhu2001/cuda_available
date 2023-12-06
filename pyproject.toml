@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "cuda_available"
-dynamic = ["version"]
+version = "0.1.0"
 description = "A package for checking available CUDA device information"
 readme = "README.md"
 authors = [{ name = "Alex", email = "AlexZhu2001@stu.xupt.edu.cn" }]
@@ -26,18 +26,9 @@ cmake.minimum-version = "3.15"
 wheel.expand-macos-universal-tags = true
 experimental = true
 
-[tool.scikit-build.metadata.version]
-provider = "scikit_build_core.metadata.regex"
-input = "/tmp/VERSION"
-regex = "(?P<value>.+)"
-
 [tool.cibuildwheel]
 build-verbosity = 1
 archs = ["auto64"]
-
-[tool.cibuildwheel.linux]
-before-all = "python3.9 ./scripts/install_cuda_manylinux.py&&source /root/.bashrc&&python3.9 ./scripts/make_version.py&&nvcc -V"
-environment-pass = ["CUDA_VERSION", "CUDA_PATH_LINUX"]
 
 [tool.ruff]
 src = ["src"]
@@ -69,6 +60,7 @@ extend-select = [
 ignore = [
     "PLR09",   # Too many X
     "PLR2004", # Magic comparison
+    "PTH118",
 ]
 
 [tool.ruff.lint.per-file-ignores]
