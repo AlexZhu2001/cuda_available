@@ -37,7 +37,7 @@ archs = ["auto64"]
 
 [tool.cibuildwheel.linux]
 before-all = "python3.9 ./scripts/install_cuda_manylinux.py&&source /root/.bashrc&&python3.9 ./scripts/make_version.py&&nvcc -V"
-environment-pass = ["CUDA_VERSION"]
+environment-pass = ["CUDA_VERSION", "CUDA_PATH_LINUX"]
 
 [tool.ruff]
 src = ["src"]

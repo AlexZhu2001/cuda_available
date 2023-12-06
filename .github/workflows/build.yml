@@ -90,7 +90,7 @@ jobs:
         shell: bash
         env:
           CUDA_VERSION: ${{ matrix.cuda }}
-          CIBW_ENVIRONMENT: "CUDA_VERSION=${{matrix.cuda}}"
+          CIBW_ENVIRONMENT: "CUDA_VERSION=${{matrix.cuda}} CUDA_PATH_LINUX=/usr/local/cuda-${{matrix.cuda}}"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
         run: |
           python -m cibuildwheel --output-dir wheelhouse
