@@ -104,7 +104,7 @@ jobs:
           path: ./wheelhouse/*.whl
 #------------------------------------------#
   upload:
-    name: Upload if release
+    name: Upload
     needs: [build-wheel-linux, build-wheel-win]
     runs-on: ubuntu-latest
     steps:
