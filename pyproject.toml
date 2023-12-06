@@ -36,7 +36,7 @@ build-verbosity = 1
 archs = ["auto64"]
 
 [tool.cibuildwheel.linux]
-before-build = "python3.9 ./scripts/install_cuda_manylinux.py&&source /root/.bashrc&&python3.9 ./scripts/make_version.py"
+before-all = "python3.9 ./scripts/install_cuda_manylinux.py&&source /root/.bashrc&&python3.9 ./scripts/make_version.py&&nvcc -V"
 environment-pass = ["CUDA_VERSION"]
 
 [tool.ruff]
