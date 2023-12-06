@@ -62,7 +62,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: wheels-win
+          name: wheels
           path: ./wheelhouse/*.whl
 #------------------------------------------#
   build-wheel-linux:
@@ -97,10 +97,10 @@ jobs:
         env: 
           CUDA_VERSION: ${{matrix.cuda}}
         run: python ./scripts/rename_wheels.py
-        
+
       - uses: actions/upload-artifact@v3
         with:
-          name: wheels-linux
+          name: wheels
           path: ./wheelhouse/*.whl
 
 
