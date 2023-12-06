@@ -102,5 +102,20 @@ jobs:
         with:
           name: wheels
           path: ./wheelhouse/*.whl
-
+#------------------------------------------#
+  upload:
+    name: Upload if release
+    needs: [build-wheel-linux, build-wheel-win]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make temp dir
+        run: mkdir -pv wheels
+      - uses: actions/download-artifact@v3
+        with:
+          name: wheels
+          path: ./wheels
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: ./wheels/
 
