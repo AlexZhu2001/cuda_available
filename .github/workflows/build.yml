@@ -13,7 +13,7 @@ jobs:
   build-wheel-win:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       # explicit include-based build matrix, of known valid options
       matrix:
         include:
@@ -69,7 +69,7 @@ jobs:
   build-wheel-linux:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           - os: ubuntu-22.04
@@ -114,7 +114,7 @@ jobs:
   deploy-tar:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           - os: ubuntu-22.04
@@ -144,11 +144,17 @@ jobs:
         env:
           CUDA_VERSION: ${{ matrix.cuda }}
         run: python3.12 ./scripts/make_version.py
+      - name: Check path
+        run: |
+          echo $PATH
+          echo $LD_LIBRARY_PATH
       - name: Build source tar
         env: 
           PATH: '$PATH:/usr/local/cuda-${{matrix.cuda}}/bin'
           LD_LIBRARY_PATH: '$LD_LIBRARY_PATH:/usr/local/cuda-${{matrix.cuda}}/lib64'
         run: |
+          echo $PATH
+          echo $LD_LIBRARY_PATH
           python -m build
       - name: Publish wheels to PyPI
         continue-on-error: true

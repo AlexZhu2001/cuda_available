@@ -10,3 +10,6 @@ CUDA_VERSION = ''.join(os.environ["CUDA_VERSION"].split('.')[:-1])
 
 with open("VERSION", 'w') as f:
     f.write(f"{VERSION}+cu{CUDA_VERSION}")
+
+print("Version write to VERSION")
+print("\n".join(os.listdir()))
