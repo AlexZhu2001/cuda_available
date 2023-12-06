@@ -26,9 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          submodules: 'recursive'
+          submodules: "recursive"
       - name: Install CUDA
-        env: 
+        env:
           cuda: ${{ matrix.cuda }}
           visual_studio: ${{ matrix.visual_studio }}
         shell: powershell
@@ -70,7 +70,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      # explicit include-based build matrix, of known valid options
       matrix:
         include:
           - os: ubuntu-22.04
@@ -80,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          submodules: 'recursive'
+          submodules: "recursive"
       - uses: actions/setup-python@v4
       - name: Install cibuildwheel
         shell: bash
@@ -95,7 +94,9 @@ jobs:
       - name: Build wheels
         shell: bash
         env:
-          CIBW_ENVIRONMENT: 'cuda=${{matrix.cuda}}'
+          CUDA_VERSION: ${{ matrix.cuda }}
+          CIBW_ENVIRONMENT: "CUDA_VERSION=${{matrix.cuda}}"
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
         run: python -m cibuildwheel --output-dir wheelhouse
       - uses: actions/upload-artifact@v3
         with:
@@ -108,7 +109,7 @@ jobs:
         run: |
           pip install twine
           twine upload wheelhouse/*.whl
-      
+
   deploy-tar:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -131,8 +132,9 @@ jobs:
           pip install build twine flake8 setuptools wheel
       - name: Install CUDA
         env:
-          cuda: ${{ matrix.cuda }}
-        run: sudo bash ./scripts/install_cuda_ubuntu.sh
+          CUDA_VERSION: ${{ matrix.cuda }}
+        run: |
+          python3.12 ./scripts/install_cuda_ubuntu.py
         shell: bash
       - name: Install gcc and g++
         run: sudo apt-get install gcc-11 g++-11
