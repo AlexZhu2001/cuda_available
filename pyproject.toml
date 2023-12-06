@@ -33,9 +33,11 @@ regex = "(?P<value>.+)"
 
 [tool.cibuildwheel]
 build-verbosity = 1
-before-build = "python3.9 ./scripts/install_cuda_manylinux.py"
-environment-pass = ["CUDA_VERSION"]
 archs = ["auto64"]
+
+[tool.cibuildwheel.linux]
+before-build = "python3.9 ./scripts/install_cuda_manylinux.py"
+environment-pass = ["CUDA_VERSION", "PATH", "LD_LIBRARY_PATH"]
 
 [tool.ruff]
 src = ["src"]

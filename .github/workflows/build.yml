@@ -97,6 +97,7 @@ jobs:
           CUDA_VERSION: ${{ matrix.cuda }}
           CIBW_ENVIRONMENT: "CUDA_VERSION=${{matrix.cuda}}"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
+          CIBW_ENVIRONMENT_LINUX: PATH=/usr/local/cuda-${{matrix.cuda}}/bin:$PATH LD_LIBRARY_PATH=/usr/local/cuda-${{matrix.cuda}}/lib64:$LD_LIBRARY_PATH
         run: python -m cibuildwheel --output-dir wheelhouse
       - uses: actions/upload-artifact@v3
         with:
