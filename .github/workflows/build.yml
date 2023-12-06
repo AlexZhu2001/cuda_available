@@ -97,7 +97,7 @@ jobs:
           CUDA_VERSION: ${{ matrix.cuda }}
           CIBW_ENVIRONMENT: "CUDA_VERSION=${{matrix.cuda}}"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-          CIBW_ENVIRONMENT_LINUX: PATH=/usr/local/cuda-${{matrix.cuda}}/bin:$PATH LD_LIBRARY_PATH=/usr/local/cuda-${{matrix.cuda}}/lib64:$LD_LIBRARY_PATH
+          CIBW_ENVIRONMENT_LINUX: PATH=$PATH:/usr/local/cuda-${{matrix.cuda}}/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-${{matrix.cuda}}/lib64
         run: python -m cibuildwheel --output-dir wheelhouse
       - uses: actions/upload-artifact@v3
         with:
@@ -143,8 +143,11 @@ jobs:
         shell: bash
         env:
           CUDA_VERSION: ${{ matrix.cuda }}
-        run: python ./scripts/make_version.py
+        run: python3.12 ./scripts/make_version.py
       - name: Build source tar
+        env: 
+          PATH: '$PATH:/usr/local/cuda-${{matrix.cuda}}/bin'
+          LD_LIBRARY_PATH: '$LD_LIBRARY_PATH:/usr/local/cuda-${{matrix.cuda}}/lib64'
         run: |
           python -m build
       - name: Publish wheels to PyPI
