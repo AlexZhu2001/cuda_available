@@ -141,7 +141,10 @@ jobs:
         run: python3.12 ./scripts/make_version.py
       - name: Build source tar
         run: |
-          source /root/.bashrc
+          export CUDA_PATH=/usr/local/cuda-${{ matrix.cuda }}
+          export PATH="$CUDA_PATH/bin:$PATH"
+          export LD_LIBRARY_PATH="$CUDA_PATH/lib:$LD_LIBRARY_PATH"
+          export LD_LIBRARY_PATH="$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
           python -m build
       - name: Publish wheels to PyPI
         continue-on-error: true
