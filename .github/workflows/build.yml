@@ -48,17 +48,17 @@ jobs:
       - name: Install cibuildwheel
         shell: powershell
         run: python -m pip install cibuildwheel==2.16.2
+      
+      - name: Generate version file
+        env:
+          CUDA_VERSION: ${{matrix.cuda}}
+        run: python ./scripts/make_version.py
 
       - name: Build wheels
         shell: bash
         run: |
           rm -rf ./wheelhouse
           python -m cibuildwheel --output-dir wheelhouse
-
-      - name: Change names
-        env: 
-          CUDA_VERSION: ${{matrix.cuda}}
-        run: python ./scripts/rename_wheels.py
 
       - uses: actions/upload-artifact@v3
         with:
@@ -84,19 +84,20 @@ jobs:
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
-
+      
+      - name: Generate version file
+        env:
+          CUDA_VERSION: ${{matrix.cuda}}
+        run: python3 ./scripts/make_version.py
+      
       - name: Build wheels
         shell: bash
         env:
           CIBW_MANYLINUX_X86_64_IMAGE: sameli/manylinux2014_x86_64_cuda_${{matrix.cuda}}
+          CIBW_ENVIRONMENT: AUDITWHEEL_PLAT="manylinux2014_$(uname -m)"
         run: |
           rm -rf ./wheelhouse
           python -m cibuildwheel --output-dir wheelhouse
-
-      - name: Change names
-        env: 
-          CUDA_VERSION: ${{matrix.cuda}}
-        run: python ./scripts/rename_wheels.py
 
       - uses: actions/upload-artifact@v3
         with:

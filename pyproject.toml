@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "cuda_available"
-version = "0.1.0"
+dynamic = ["version"]
 description = "A package for checking available CUDA device information"
 readme = "README.md"
 authors = [{ name = "Alex", email = "AlexZhu2001@stu.xupt.edu.cn" }]
@@ -23,12 +23,21 @@ classifiers = [
 
 [tool.scikit-build]
 cmake.minimum-version = "3.15"
+sdist.include = ["src/VERSION.metadata"]
 wheel.expand-macos-universal-tags = true
 
 [tool.cibuildwheel]
 build-verbosity = 1
 archs = ["auto64"]
 skip = ["*-musllinux_*"]
+
+[tool.cibuildwheel.linux]
+environment-pass = ["AUDITWHEEL_PLAT"]
+
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "src/VERSION.metadata"
+regex = "VERSION=(?P<value>[0-9].[0-9].[0-9]\\+cu\\d{3})"
 
 [tool.ruff]
 src = ["src"]

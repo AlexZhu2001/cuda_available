@@ -2,5 +2,5 @@
 /wheelhouse/
 /build/
 /dist/
-VERSION
+VERSION.metadata
 /venv/
