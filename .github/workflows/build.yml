@@ -118,9 +118,11 @@ jobs:
           - os: ubuntu-22.04
             cuda: "11.8"
             python: "3.11"
+            gcc: 11
           - os: ubuntu-22.04
             cuda: "11.7"
             python: "3.11"
+            gcc: 11
     steps:
       - uses: actions/checkout@v3
         with:
@@ -129,7 +131,14 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{matrix.python}}
-      
+
+      - name: Install/Select gcc and g++ 
+        run: |
+          sudo apt-get install -y gcc-${{ matrix.gcc }} g++-${{ matrix.gcc }}
+          echo "CC=/usr/bin/gcc-${{ matrix.gcc }}" >> $GITHUB_ENV
+          echo "CXX=/usr/bin/g++-${{ matrix.gcc }}" >> $GITHUB_ENV
+          echo "CUDAHOSTCXX=/usr/bin/g++-${{ matrix.gcc }}" >> $GITHUB_ENV
+    
       - name: Install CUDA toolkit
         env: 
           CUDA_VERSION: ${{matrix.cuda}}
@@ -140,7 +149,16 @@ jobs:
           sudo dpkg -i cuda-keyring*.deb
           sudo apt-get update
           sudo apt-get -y install cuda-toolkit-11-`echo -n $CUDA_VERSION|tail -c 1`
-    
+          export CUDA_PATH=/usr/local/cuda-${{matrix.cuda}}
+          export PATH="$CUDA_PATH/bin:$PATH"
+          export LD_LIBRARY_PATH="$CUDA_PATH/lib:$LD_LIBRARY_PATH"
+          export LD_LIBRARY_PATH="$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
+          echo "CUDA_PATH=${CUDA_PATH}" >> $GITHUB_ENV
+          echo "${CUDA_PATH}/bin" >> $GITHUB_PATH
+          echo "LD_LIBRARY_PATH=${CUDA_PATH}/lib:${LD_LIBRARY_PATH}" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${CUDA_PATH}/lib64:${LD_LIBRARY_PATH}" >> $GITHUB_ENV
+          echo "CUDA_PATH=${CUDA_PATH}"
+          
       - name: Generate version file
         env:
           CUDA_VERSION: ${{matrix.cuda}}
