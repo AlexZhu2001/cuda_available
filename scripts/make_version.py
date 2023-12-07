@@ -6,7 +6,7 @@
 import os
 import sys
 
-VERSION = "0.1.0"
+VERSION = "0.1."
 
 if __name__ == "__main__":
     cuda_ver = os.environ.get("CUDA_VERSION")
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     major,minor = cuda_ver.split(".")[:2]
     fp = "./src/VERSION.metadata"
     with open(fp, "w") as f:
-        text = f"VERSION={VERSION}+cu{major}{minor}"
+        text = f"VERSION={VERSION}{major}{minor}"
         f.write(text)
         print(f"Result {text} write to {fp} succeed")
     
