@@ -44,6 +44,8 @@ jobs:
           ls $env:CUDA_PATH\include
 
       - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
 
       - name: Install cibuildwheel
         shell: powershell
@@ -81,9 +83,11 @@ jobs:
           submodules: "recursive"
 
       - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.16.2
+        run: python3 -m pip install cibuildwheel==2.16.2
       
       - name: Generate version file
         env:
@@ -104,9 +108,58 @@ jobs:
           name: wheels
           path: ./wheelhouse/*.whl
 #------------------------------------------#
+  build-sdist:
+    name: Build sdist
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            cuda: "11.8"
+            python: "3.11"
+          - os: ubuntu-22.04
+            cuda: "11.7"
+            python: "3.11"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{matrix.python}}
+      
+      - name: Install CUDA toolkit
+        env: 
+          CUDA_VERSION: ${{matrix.cuda}}
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install wget
+          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+          sudo dpkg -i cuda-keyring*.deb
+          sudo apt-get update
+          sudo apt-get -y install cuda-toolkit-11-`echo -n $CUDA_VERSION|tail -c 1`
+    
+      - name: Generate version file
+        env:
+          CUDA_VERSION: ${{matrix.cuda}}
+        run: python3 ./scripts/make_version.py
+      
+      - name: Build sdist
+        run: |
+          rm -rf ./dist
+          python3 -m pip install build
+          python3 -m build . --sdist
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: sdist
+          path: ./dist/*tar*
+#------------------------------------------#
   upload:
     name: Upload
-    needs: [build-wheel-linux, build-wheel-win]
+    needs: [build-wheel-linux, build-wheel-win, build-sdist]
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -114,13 +167,20 @@ jobs:
       id-token: write
     steps:
       - name: Make temp dir
-        run: mkdir -pv wheels
+        run: mkdir -pv files
+
       - uses: actions/download-artifact@v3
         with:
           name: wheels
-          path: ./wheels
+          path: ./files
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: sdist
+          path: ./files
+
       - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: ./wheels/
+          packages-dir: ./files
 
