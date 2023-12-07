@@ -15,19 +15,19 @@ A package for checking available CUDA device information
 ### Usage
 #### Get count of cuda device
 ```Python
-from cuda_avaliable import getCudaDeviceCount
+from cuda_avaliable import cuda_avaliable
 
-cnt = getCudaDeviceCount()
+cnt = cuda_avaliable.getCudaDeviceCount()
 print(f"Cuda device count: {cnt}")
 ```
 
 #### Get infomation of cuda device
 ```Python
-from cuda_avaliable import getCudaDeviceCount, CudaDeviceInfo
+from cuda_avaliable import cuda_avaliable
 
-cnt = getCudaDeviceCount()
+cnt = cuda_avaliable.getCudaDeviceCount()
 for idx in range(cnt):
-    info = CudaDeviceInfo(idx)
+    info = cuda_avaliable.CudaDeviceInfo(idx)
     print(f"ID: {info.id}")
     print(f"Name: {info.name}")
     print(f"ComputeCapability: {info.computeCapability}")

@@ -3,6 +3,7 @@
 #include <tuple>
 #include <cuda_runtime.h>
 #include <exception>
+#include <sstream>
 
 using namespace std;
 namespace py = pybind11;
@@ -68,6 +69,27 @@ public:
     }
 };
 
+string repr_for_info(const CudaDeviceInfo &a)
+{
+    auto [ccx, ccy] = a.get_computeCapability();
+    auto [pcix, pciy, pciz] = a.get_pciId();
+    string tcc = a.get_isTccDriver()
+                     ? "True"
+                     : "False";
+    stringstream ss;
+    ss << "{" << endl
+       << "\t.Id = " << a.get_id() << endl
+       << "\t.Name = " << a.get_name() << endl
+       << "\t.Compute Capability = " << ccx << "." << ccy << endl
+       << "\t.Total Global Video Memory = " << a.get_totalGlobalVmem() / 1024.0 / 1024.0 << "MBytes" << endl
+       << "\t.PCI Id = " << pcix << "." << pciy << "." << pciz << endl
+       << "\t Is using TCC driver = " << tcc << endl
+       << "}" << endl;
+    string output;
+    ss >> output;
+    return output;
+}
+
 int getCudaDeviceCount()
 {
     int cnt = 0;
@@ -103,7 +125,9 @@ PYBIND11_MODULE(cuda_available, m)
         .PROP(computeCapability, "compute capability")
         .PROP(totalGlobalVmem, "Global memory available on device in bytes")
         .PROP(pciId, "PCI bus ID, PCI device ID, PCI domain ID of this device")
-        .PROP(isTccDriver, "true if device is a Tesla device using TCC driver, false otherwise");
+        .PROP(isTccDriver, "true if device is a Tesla device using TCC driver, false otherwise")
+        .def("__repr__", &repr_for_info)
+        .def("__str__", &repr_for_info);
 
     m.def("getCudaDeviceCount", &getCudaDeviceCount, R"pbdoc(
         Get available cuda device count

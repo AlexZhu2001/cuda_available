@@ -4,6 +4,8 @@ project(cuda_available LANGUAGES CUDA CXX VERSION 0.1.0)
 include(CheckLanguage)
 check_language(CUDA)
 
+set(CMAKE_CXX_STANDARD 17)
+
 find_package(Python 3.7 COMPONENTS Interpreter Development.Module REQUIRED)
 
 add_subdirectory(pybind11)
