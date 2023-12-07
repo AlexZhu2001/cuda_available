@@ -3,6 +3,14 @@
 A package for checking available CUDA device information
 
 ![GitHub License](https://img.shields.io/github/license/AlexZhu2001/cuda_available)
+![PyPI - Version](https://img.shields.io/pypi/v/cuda-available)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/alexzhu2001/cuda_available/build.yml)
+
+**WARNING: The last field of version is related to cuda version**
+
+**0.1.117 is using CUDA 11.7 COMPILER to build**
+
+**0.1.118 is using CUDA 11.8 COMPLIER to build**
 
 ### Usage
 #### Get count of cuda device
